@@ -1,0 +1,33 @@
+{
+  "name": "svelte-segmented-input",
+  "version": "1.0.1",
+  "description": "A simple component for number-only segmented input. Ideal for phone numbers or 2FA codes",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "svelte": "src/index.js",
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZuriPL/svelte-segmented-input.git"
+  },
+  "keywords": [
+    "svelte",
+    "input",
+    "segmented input"
+  ],
+  "author": "zuriii",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ZuriPL/svelte-segmented-input/issues"
+  },
+  "homepage": "https://github.com/ZuriPL/svelte-segmented-input#readme",
+  "devDependencies": {
+    "rollup": "^2.76.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-svelte": "^7.1.0",
+    "svelte": "^3.49.0"
+  }
+}
