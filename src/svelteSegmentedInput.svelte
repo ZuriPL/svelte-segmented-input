@@ -79,6 +79,10 @@
         if (a > b) return a
         return b
     }
+
+    function getTotalLength(idx, arr) {
+        return arr.slice(0, idx).reduce((previousValue, currentValue) => previousValue + currentValue, 0)
+    }
 </script>
 
 <section class="input-wrapper">
@@ -88,7 +92,7 @@
                 <span>-</span>
             {/if}
             {#each range(part) as index}
-                <input id="{index == 0 ? 'first-input' : ''}" type="number" on:keydown="{handleMoveAndBackspace}" on:keypress|preventDefault="{handleKey}" on:paste|preventDefault="{handlePaste}" bind:this="{els[index]}" bind:value="{values[index]}" index="{index}">
+                <input id="{index == 0 ? 'first-input' : ''}" type="number" on:keydown="{handleMoveAndBackspace}" on:keypress|preventDefault="{handleKey}" on:paste|preventDefault="{handlePaste}" bind:this="{els[index + getTotalLength(idx, length)]}" bind:value="{values[index + getTotalLength(idx,length)]}" index="{index + getTotalLength(idx, length)}">
             {/each}
         {/each}
     {:else}
