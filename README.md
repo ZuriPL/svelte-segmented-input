@@ -5,3 +5,4 @@ A simple component for number-only segmented input. Ideal for phone numbers or 2
 ROADMAP:
 
 -   segmented input
+-   add custom styling support
