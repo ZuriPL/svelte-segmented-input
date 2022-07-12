@@ -19,15 +19,15 @@
         let targetIndex = +e.target.getAttribute('index')
 
         switch(e.key) {
-            case 'ArrowRight': 
+            case 'ArrowRight': //ArrowRight
                 e.preventDefault()
                 els[min((length - 1), targetIndex + 1)].focus()
                 break
-            case 'ArrowLeft': 
+            case 'ArrowLeft': //ArrowLeft
                 e.preventDefault()
                 els[max(0, targetIndex - 1)].focus()
                 break
-            case 'Backspace': 
+            case 'Backspace': //Backspace
                 e.preventDefault()
 
                 // if curent cell is empty we want to backspace the previous cell
@@ -107,6 +107,9 @@
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
         -webkit-appearance: none;
+    }
+    input[type=number] {
+        -moz-appearance: textfield;
     }
 
     /* STYLING */

@@ -2,10 +2,6 @@
 
 A simple component for number-only segmented input. Ideal for phone numbers or 2FA codes
 
-TODO:
-
--   add custom styling support
-
 HOW TO USE:
 
 ```
