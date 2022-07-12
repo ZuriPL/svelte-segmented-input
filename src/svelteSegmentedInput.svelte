@@ -82,9 +82,20 @@
 </script>
 
 <section class="input-wrapper">
-    {#each range(length) as index}
-        <input id="{index == 0 ? 'first-input' : ''}" type="number" on:keydown="{handleMoveAndBackspace}" on:keypress|preventDefault="{handleKey}" on:paste|preventDefault="{handlePaste}" bind:this="{els[index]}" bind:value="{values[index]}" index="{index}">
-    {/each}
+    {#if Array.isArray(length)}
+        {#each length as part, idx}
+            {#if idx != 0}
+                <span>-</span>
+            {/if}
+            {#each range(part) as index}
+                <input id="{index == 0 ? 'first-input' : ''}" type="number" on:keydown="{handleMoveAndBackspace}" on:keypress|preventDefault="{handleKey}" on:paste|preventDefault="{handlePaste}" bind:this="{els[index]}" bind:value="{values[index]}" index="{index}">
+            {/each}
+        {/each}
+    {:else}
+        {#each range(length) as index}
+            <input id="{index == 0 ? 'first-input' : ''}" type="number" on:keydown="{handleMoveAndBackspace}" on:keypress|preventDefault="{handleKey}" on:paste|preventDefault="{handlePaste}" bind:this="{els[index]}" bind:value="{values[index]}" index="{index}">
+        {/each}
+    {/if}
 </section>
 
 <style>
@@ -106,6 +117,9 @@
     }
     input:focus {
         border: 2px solid #5f91f0;
+    }
+    span {
+        font-weight: bold;
     }
     .input-wrapper {
         display: flex;
