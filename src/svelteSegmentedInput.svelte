@@ -4,7 +4,7 @@
     export let length
     let els = []
     let values = []
-    export let value = 'typing'
+    export let value = ''
     export let style = {}
 
     let varNames = Object.keys(style)
@@ -17,7 +17,7 @@
     
     $: {
         (() => {
-            if (values.length != getTotalLength(length) || values.includes(null)) return value = 'typing'
+            if (values.length != getTotalLength(length) || values.includes(null)) return value = ''
             value = 0
             values.forEach((digit, index) => {
                 value += digit * (10 ** (getTotalLength(length) - index - 1))
