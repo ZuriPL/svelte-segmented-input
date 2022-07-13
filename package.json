@@ -1,9 +1,10 @@
 {
   "name": "svelte-segmented-input",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "type": "module",
   "description": "A simple component for number-only segmented input. Ideal for phone numbers or 2FA codes",
   "main": "dist/index.js",
+  "types": "src/index.d.ts",
   "module": "dist/index.mjs",
   "svelte": "src/index.js",
   "scripts": {
