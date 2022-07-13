@@ -1,11 +1,14 @@
 <script>
     import { onMount } from "svelte/internal";
+    import { createEventDispatcher } from 'svelte' 
 
     export let length
     let els = []
     let values = []
     export let value = ''
     export let style = {}
+
+    const dispatch = createEventDispatcher()
 
     let varNames = Object.keys(style)
 
@@ -23,6 +26,7 @@
                 value += digit * (10 ** (getTotalLength(length) - index - 1))
             })
             value = value.toString().padStart(getTotalLength(length), '0')
+            dispatch('valueEntered', {value})
         })()
     }
 
