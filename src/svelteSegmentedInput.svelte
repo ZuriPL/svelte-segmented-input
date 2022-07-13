@@ -17,12 +17,12 @@
     
     $: {
         (() => {
-            if (values.length != length || values.includes(null)) return value = 'typing'
+            if (values.length != getTotalLength(length) || values.includes(null)) return value = 'typing'
             value = 0
             values.forEach((digit, index) => {
-                value += digit * (10 ** (length - index - 1))
+                value += digit * (10 ** (getTotalLength(length) - index - 1))
             })
-            value = value.toString().padStart(length, '0')
+            value = value.toString().padStart(getTotalLength(length), '0')
         })()
     }
 
@@ -30,15 +30,15 @@
         let targetIndex = +e.target.getAttribute('index')
 
         switch(e.key) {
-            case 'ArrowRight': //ArrowRight
+            case 'ArrowRight':
                 e.preventDefault()
-                els[min((length - 1), targetIndex + 1)].focus()
+                els[min((getTotalLength(length) - 1), targetIndex + 1)].focus()
                 break
-            case 'ArrowLeft': //ArrowLeft
+            case 'ArrowLeft':
                 e.preventDefault()
                 els[max(0, targetIndex - 1)].focus()
                 break
-            case 'Backspace': //Backspace
+            case 'Backspace':
                 e.preventDefault()
 
                 // if curent cell is empty we want to backspace the previous cell
@@ -55,7 +55,7 @@
     function handleKey(e) {
         if (Number.isNaN(+e.key)) return
         values[e.target.getAttribute('index')] = +e.key
-        els[min((length - 1), +e.target.getAttribute('index') + 1)].focus()
+        els[min((getTotalLength(length) - 1), +e.target.getAttribute('index') + 1)].focus()
     }
     
     function handlePaste(e) {
@@ -91,19 +91,21 @@
         return b
     }
 
-    function getTotalLength(idx, arr) {
+    function getTotalLength(arr, idx = arr.length) {
+				if (!Array.isArray(arr)) arr = [ arr ]
         return arr.slice(0, idx).reduce((previousValue, currentValue) => previousValue + currentValue, 0)
     }
 </script>
 
-<section class="input-wrapper">
+
+<section id="input-wrapper">
     {#if Array.isArray(length)}
         {#each length as part, idx}
             {#if idx != 0}
                 <span>-</span>
             {/if}
             {#each range(part) as index}
-                <input id="{index == 0 ? 'first-input' : ''}" type="number" on:keydown="{handleMoveAndBackspace}" on:keypress|preventDefault="{handleKey}" on:paste|preventDefault="{handlePaste}" bind:this="{els[index + getTotalLength(idx, length)]}" bind:value="{values[index + getTotalLength(idx,length)]}" index="{index + getTotalLength(idx, length)}">
+                <input id="{index == 0 ? 'first-input' : ''}" type="number" on:keydown="{handleMoveAndBackspace}" on:keypress|preventDefault="{handleKey}" on:paste|preventDefault="{handlePaste}" bind:this="{els[index + getTotalLength(length, idx)]}" bind:value="{values[index + getTotalLength(length, idx)]}" index="{index + getTotalLength(length, idx)}">
             {/each}
         {/each}
     {:else}
@@ -112,6 +114,7 @@
         {/each}
     {/if}
 </section>
+
 
 <style>
     /* removes up and down arrows from inputs */
@@ -128,6 +131,7 @@
         font-size: var(--fontSize, 2rem);
         border-radius: var(--borderRadius, 0.4rem);
         border: var(--borderWidth, 2px) solid var(--borderColor, #e5e5e5);
+        color: var(--textColor, black);
         outline: none;
         padding: var(--padding, 0.25rem 1rem);
         box-sizing: content-box;
@@ -138,9 +142,9 @@
         border: var(--borderWidth, 2px) solid var(--borderColorActive, #5f91f0);
     }
     span {
-        font-weight: var(--fontWeight, bold);
+        font-weight: bold;
     }
-    .input-wrapper {
+    #input-wrapper {
         display: flex;
         justify-content: space-between;
         align-items: center;
