@@ -26,6 +26,7 @@ A simple component for number-only segmented input. Ideal for phone numbers or 2
 -   border-radius: var(--borderRadius, 0.4rem);
 -   border: var(--borderWidth, 2px) solid var(--borderColor, #e5e5e5);
 -   padding: var(--padding, 0.25rem 1rem);
+-   background-color: var(--bgInput, transparent);
 
 ### input:focus
 
@@ -34,6 +35,7 @@ A simple component for number-only segmented input. Ideal for phone numbers or 2
 ### input-wrapper
 
 -   width: var(--inputWidth, 100%);
+-   background-color: var(--bgWrapper, transparent);
 
 Alternatively, you can target each item with a descendant selector, as all elements are inside a section with id #input-wrapper
 
