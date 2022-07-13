@@ -2,16 +2,16 @@
     export let length
     let els = []
     let values = []
-    export let code = 'typing'
+    export let value = 'typing'
     
     $: {
         (() => {
-            if (values.length != length || values.includes(null)) return code = 'typing'
-            code = 0
-            values.forEach((value, index) => {
-                code += value * (10 ** (length - index - 1))
+            if (values.length != length || values.includes(null)) return value = 'typing'
+            value = 0
+            values.forEach((digit, index) => {
+                value += digit * (10 ** (length - index - 1))
             })
-            code = code.toString().padStart(length, '0')
+            value = value.toString().padStart(length, '0')
         })()
     }
 
