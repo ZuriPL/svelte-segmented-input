@@ -5,7 +5,7 @@
     let els = []
     let values = []
     export let value = 'typing'
-    export let style
+    export let style = {}
 
     let varNames = Object.keys(style)
 
