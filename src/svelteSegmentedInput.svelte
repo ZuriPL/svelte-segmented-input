@@ -11,10 +11,11 @@
     const dispatch = createEventDispatcher()
 
     let varNames = Object.keys(style)
+    let styleProvider
 
     onMount(() => {
         for (let i = 0; i < varNames.length; i++) {
-            document.body.style.setProperty(`--${varNames[i]}`, style[varNames[i]]);
+            styleProvider.style.setProperty(`--${varNames[i]}`, style[varNames[i]]);
         }
     })
     
@@ -102,7 +103,7 @@
 </script>
 
 
-<section id="input-wrapper">
+<section id="input-wrapper" bind:this="{styleProvider}">
     {#if Array.isArray(length)}
         {#each length as part, idx}
             {#if idx != 0}
