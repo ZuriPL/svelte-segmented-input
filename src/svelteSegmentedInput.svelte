@@ -14,19 +14,21 @@
     let styleProvider
 
     onMount(() => {
+        // apply all styles from the styles prop
         for (let i = 0; i < varNames.length; i++) {
             styleProvider.style.setProperty(`--${varNames[i]}`, style[varNames[i]]);
         }
+
+        // remove all empty ids from the inputs made by for loop in template
+        [...document.querySelectorAll('#input-wrapper input')].forEach(el => {
+            if (el.getAttribute('id') === '') el.removeAttribute('id')
+        })
     })
     
     $: {
         (() => {
-            if (values.length != getTotalLength(length) || values.includes(null)) return value = ''
-            value = 0
-            values.forEach((digit, index) => {
-                value += digit * (10 ** (getTotalLength(length) - index - 1))
-            })
-            value = value.toString().padStart(getTotalLength(length), '0')
+            if (values.length != getTotalLength() || values.includes(null)) return value = ''
+            value = values.join('')
             dispatch('valueEntered', {value})
         })()
     }
@@ -37,7 +39,7 @@
         switch(e.key) {
             case 'ArrowRight':
                 e.preventDefault()
-                els[min((getTotalLength(length) - 1), targetIndex + 1)].focus()
+                els[min((getTotalLength() - 1), targetIndex + 1)].focus()
                 break
             case 'ArrowLeft':
                 e.preventDefault()
@@ -60,7 +62,7 @@
     function handleKey(e) {
         if (Number.isNaN(+e.key)) return
         values[e.target.getAttribute('index')] = +e.key
-        els[min((getTotalLength(length) - 1), +e.target.getAttribute('index') + 1)].focus()
+        els[min((getTotalLength() - 1), +e.target.getAttribute('index') + 1)].focus()
     }
     
     function handlePaste(e) {
@@ -71,8 +73,8 @@
     function waterfall(data) {
         let [first, ...rest] = data.arr
         values[data.target.getAttribute('index')] = +first
-        els[min((length - 1), +data.target.getAttribute('index') + 1)].focus()
-        if (data.target.getAttribute('index') == length - 1 || rest.length === 0) return
+        els[min((getTotalLength() - 1), +data.target.getAttribute('index') + 1)].focus()
+        if (data.target.getAttribute('index') == getTotalLength() - 1 || rest.length === 0) return
         waterfall({target: els[+data.target.getAttribute('index') + 1], arr: rest })
     }
 
@@ -96,9 +98,9 @@
         return b
     }
 
-    function getTotalLength(arr, idx = arr.length) {
-				if (!Array.isArray(arr)) arr = [ arr ]
-        return arr.slice(0, idx).reduce((previousValue, currentValue) => previousValue + currentValue, 0)
+    function getTotalLength(idx = length.length) {
+		if (!Array.isArray(length)) length = [ length ]
+        return length.slice(0, idx ?? 1).reduce((previousValue, currentValue) => previousValue + currentValue, 0)
     }
 </script>
 
@@ -110,7 +112,7 @@
                 <span>-</span>
             {/if}
             {#each range(part) as index}
-                <input id="{index == 0 ? 'first-input' : ''}" type="number" on:keydown="{handleMoveAndBackspace}" on:keypress|preventDefault="{handleKey}" on:paste|preventDefault="{handlePaste}" bind:this="{els[index + getTotalLength(length, idx)]}" bind:value="{values[index + getTotalLength(length, idx)]}" index="{index + getTotalLength(length, idx)}">
+                <input id="{index == 0 ? 'first-input' : ''}" type="number" on:keydown="{handleMoveAndBackspace}" on:keypress|preventDefault="{handleKey}" on:paste|preventDefault="{handlePaste}" bind:this="{els[index + getTotalLength(idx)]}" bind:value="{values[index + getTotalLength(idx)]}" index="{index + getTotalLength(idx)}">
             {/each}
         {/each}
     {:else}
@@ -119,7 +121,6 @@
         {/each}
     {/if}
 </section>
-
 
 <style>
     /* removes up and down arrows from inputs */
