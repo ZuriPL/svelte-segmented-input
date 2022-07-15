@@ -18,6 +18,8 @@
             styleProvider.style.setProperty(`--${varNames[i]}`, style[varNames[i]]);
         }
 
+        if (style['--gap'] === 'auto' || style['--gap'] === undefined) styleProvider.style.justifyContent = 'space-between';
+
         // remove all empty ids from the inputs made by for loop in template
         [...document.querySelectorAll('#input-wrapper input')].forEach(el => {
             if (el.getAttribute('id') === '') el.removeAttribute('id')
@@ -45,15 +47,16 @@
                 normValues[idx] = ' '
             })
             
-            setValue(normValues.join(''))
+            value = normValues.join('')
             if (normValues.length != getTotalLength() || normValues.includes(' ')) return
-            dispatch('valueEntered', {value: getValue()})
+            dispatch('valueEntered', {value})
         })()
     }
 
     $: {
-        
         value = value.toString().slice(0, getTotalLength())
+
+        // continue only if value is a valid number (in a string)
         if (!Number.isNaN(+value)) {
             let vals = value.toString().split('')
             
@@ -67,19 +70,16 @@
                 vals[idx] = null
             })
             
-            setValues(vals)
+            values = vals
         }
     }
-    
-    const setValues = (val) => values = val
-    const setValue = (val) => value = val.toString() 
-    const getValue = () => value
 
     function handleMoveAndBackspace(e) {
         let targetIndex = +e.target.getAttribute('index')
 
         switch(e.key) {
             case 'ArrowRight':
+            case ' ':
                 e.preventDefault()
                 // focus the next cell
                 els[min((getTotalLength() - 1), targetIndex + 1)].focus()
@@ -107,9 +107,6 @@
                     values.splice(0, 1)
                 }
                 values.reverse()
-                break
-            case 'Space':
-                e.preventDefault()
                 break
         }
     }
@@ -166,7 +163,7 @@
     }
 </script>
 
-<section id="input-wrapper" bind:this="{styleProvider}">
+<div id="input-wrapper" bind:this="{styleProvider}">
     {#if Array.isArray(length)}
         {#each length as part, idx}
             {#if idx != 0}
@@ -181,9 +178,7 @@
             <input id="{index == 0 ? 'first-input' : ''}" type="number" on:keydown="{handleMoveAndBackspace}" on:keypress|preventDefault="{handleKey}" on:paste|preventDefault="{handlePaste}" bind:this="{els[index]}" bind:value="{values[index]}" index="{index}">
         {/each}
     {/if}
-</section>
-<button on:click="{_ => value = 'www'}">Set value</button>
-
+</div>
 
 <style>
     /* removes up and down arrows from inputs */
@@ -215,9 +210,9 @@
     }
     #input-wrapper {
         display: flex;
-        justify-content: space-between;
         align-items: center;
         width: var(--inputWidth, 100%);
         background-color: var(--bgWrapper, transparent);
+        gap: var(--gap);
     }
 </style>
