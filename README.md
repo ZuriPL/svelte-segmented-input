@@ -18,13 +18,13 @@ A simple component for number-only segmented input. Ideal for 2FA codes
 <SvelteSegmentedInput bind:value="{value}" length="{6}" style="{{borderColor: 'black', inputWidth: '50%'}}" on:valueEntered="{callback}" />
 ```
 
-`value` is the current value of the input as a string or an empty string if not every field is populated. It's recommended to be binded, as it's read-only for now
+`value` is the current value of the input as a string or an empty string if not every field is populated. It's read-only currently
 
 `length` is the number of fields. accepts number or an array of numbers. when an array is passed, it will create the segments such as for an array [3, 3, 4] the input will look like this: [] [] [] - [] [] [] - [] [] [] [].
 
-`style` is an object which holds sets custom css properties to control the styling of the component
+`style` is an object which holds sets custom CSS properties to control the styling of the component
 
-`on:valueEntered` is an event that fires an event every time a full value is entered. `event.detail.value` is the value that was entered.
+`on:valueEntered` is an event that fires every time a full value is entered. `event.detail.value` is the value that was entered.
 
 ## STYLING:
 
