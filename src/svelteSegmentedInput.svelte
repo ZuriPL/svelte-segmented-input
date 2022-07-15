@@ -1,20 +1,19 @@
 <script>
-    import { onMount } from "svelte/internal";
-    import { createEventDispatcher } from 'svelte' 
+    import { createEventDispatcher, onMount } from 'svelte' 
 
     export let length
-    let els = []
-    let values = []
     export let value = ''
     export let style = {}
+    let values = []
+    let els = []
 
     const dispatch = createEventDispatcher()
 
-    let varNames = Object.keys(style)
     let styleProvider
-
+    
     onMount(() => {
         // apply all styles from the styles prop
+        let varNames = Object.keys(style)
         for (let i = 0; i < varNames.length; i++) {
             styleProvider.style.setProperty(`--${varNames[i]}`, style[varNames[i]]);
         }
@@ -27,11 +26,54 @@
     
     $: {
         (() => {
-            if (values.length != getTotalLength() || values.includes(null)) return value = ''
-            value = values.join('')
-            dispatch('valueEntered', {value})
+            // number inputs don't tolerate " " (warning in console), 
+            // but we need to show a field is empty in the value string
+
+            // clones an array w/o copying the reference
+            // this also replaces empty with null
+            let normValues = JSON.parse(JSON.stringify(values))
+            
+            let indices = []
+            
+            let idx = normValues.indexOf(null)
+            while (idx != -1) {
+                indices.push(idx)
+                idx = normValues.indexOf(null, idx + 1)
+            }
+
+            indices.forEach(idx => {
+                normValues[idx] = ' '
+            })
+            
+            setValue(normValues.join(''))
+            if (normValues.length != getTotalLength() || normValues.includes(' ')) return
+            dispatch('valueEntered', {value: getValue()})
         })()
     }
+
+    $: {
+        
+        value = value.toString().slice(0, getTotalLength())
+        if (!Number.isNaN(+value)) {
+            let vals = value.toString().split('')
+            
+            let indices = []
+            let idx = vals.indexOf(' ')
+            while (idx != -1) {
+                indices.push(idx)
+                idx = vals.indexOf(' ', idx + 1)
+            }
+            indices.forEach(idx => {
+                vals[idx] = null
+            })
+            
+            setValues(vals)
+        }
+    }
+    
+    const setValues = (val) => values = val
+    const setValue = (val) => value = val.toString() 
+    const getValue = () => value
 
     function handleMoveAndBackspace(e) {
         let targetIndex = +e.target.getAttribute('index')
@@ -39,10 +81,12 @@
         switch(e.key) {
             case 'ArrowRight':
                 e.preventDefault()
+                // focus the next cell
                 els[min((getTotalLength() - 1), targetIndex + 1)].focus()
                 break
             case 'ArrowLeft':
                 e.preventDefault()
+                // focus the previous cell
                 els[max(0, targetIndex - 1)].focus()
                 break
             case 'Backspace':
@@ -55,28 +99,45 @@
                 } else {
                     values[targetIndex] = null
                 }
+
+                // remove all trailing empty strings, since we replace them for spaces later and 
+                // it can throw off some expectations for end users
+                values.reverse()
+                while (values[0] === null) {
+                    values.splice(0, 1)
+                }
+                values.reverse()
+                break
+            case 'Space':
+                e.preventDefault()
                 break
         }
     }
     
     function handleKey(e) {
-        if (Number.isNaN(+e.key)) return
+        if (Number.isNaN(+e.key) || e.key === ' ') return // validate our input is a number, not sth like an 'e' char
         values[e.target.getAttribute('index')] = +e.key
         els[min((getTotalLength() - 1), +e.target.getAttribute('index') + 1)].focus()
     }
     
     function handlePaste(e) {
+        // check if clipboard contains a pure number
         if (Number.isNaN(+e.clipboardData.getData('text'))) return 
-        waterfall({target: e.target, arr: e.clipboardData.getData('text')})
+        waterfall({target: e.target, text: e.clipboardData.getData('text')})
     }
 
     function waterfall(data) {
-        let [first, ...rest] = data.arr
+        // separated the first char from the string
+        let [first, ...rest] = data.text
         values[data.target.getAttribute('index')] = +first
         els[min((getTotalLength() - 1), +data.target.getAttribute('index') + 1)].focus()
+        // return if every field is populated or there's nothing else left to copy
         if (data.target.getAttribute('index') == getTotalLength() - 1 || rest.length === 0) return
-        waterfall({target: els[+data.target.getAttribute('index') + 1], arr: rest })
+        waterfall({target: els[+data.target.getAttribute('index') + 1], text: rest })
     }
+
+
+    // Helpers:
 
     function range(length) {
         let arr = []
@@ -98,6 +159,7 @@
         return b
     }
 
+    // gets the sum of every number in the length array
     function getTotalLength(idx = length.length) {
 		if (!Array.isArray(length)) length = [ length ]
         return length.slice(0, idx ?? 1).reduce((previousValue, currentValue) => previousValue + currentValue, 0)
@@ -120,6 +182,8 @@
         {/each}
     {/if}
 </section>
+<button on:click="{_ => value = 'www'}">Set value</button>
+
 
 <style>
     /* removes up and down arrows from inputs */
