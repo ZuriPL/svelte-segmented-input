@@ -49,7 +49,7 @@
                 e.preventDefault()
 
                 // if curent cell is empty we want to backspace the previous cell
-                if (!values[targetIndex] && values[targetIndex] != 0) { 
+                if (!values[targetIndex] && targetIndex != 0) { 
                     els[max(0, targetIndex - 1)].focus()
                     values[targetIndex - 1] = null
                 } else {
@@ -103,7 +103,6 @@
         return length.slice(0, idx ?? 1).reduce((previousValue, currentValue) => previousValue + currentValue, 0)
     }
 </script>
-
 
 <section id="input-wrapper" bind:this="{styleProvider}">
     {#if Array.isArray(length)}

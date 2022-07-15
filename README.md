@@ -1,4 +1,4 @@
-# svelte-segmented-input [![svelte-segmented-input](https://img.shields.io/badge/-svelte--segmented--input-orange)](github.com/ZuriPL/svelte-segmented-input)
+# svelte-segmented-input [![svelte-segmented-input](https://img.shields.io/badge/-svelte--segmented--input-orange)](https://github.com/ZuriPL/svelte-segmented-input)
 
 A simple component for number-only segmented input. Ideal for 2FA codes
 
