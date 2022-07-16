@@ -48,7 +48,7 @@ const removeEvent = component.$on('valueEntered', (e) => console.log(e.detail.va
 console.log(component.value)
 ```
 
-Setting value in the props object will not trigger the `valueEntered` event, however, setting it using `component.value` will
+Setting value in the props object will not trigger the `valueEntered` event, however setting it using `component.value` will
 
 ## STYLING:
 
