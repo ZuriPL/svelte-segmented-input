@@ -13,6 +13,7 @@ export default {
 	plugins: [
 		svelte({
 			compilerOptions: {
+				accessors: true,
 				css: true,
 			},
 			emitCss: false,
