@@ -58,6 +58,7 @@ Setting value in the props object will not trigger the `valueEntered` event, how
 -   border-radius: var(--borderRadius, 0.4rem);
 -   border: var(--borderWidth, 2px) solid var(--borderColor, #e5e5e5);
 -   padding: var(--padding, 0.25rem 1rem);
+-   color: var(--textColor, black);
 -   background-color: var(--bgInput, transparent);
 
 ### input:focus
