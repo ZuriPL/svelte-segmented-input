@@ -6,6 +6,8 @@ A simple component for number-only segmented input. Ideal for 2FA codes. Minifie
 
 ## HOW TO USE:
 
+### 1. Svelte
+
 ```svelte
 <script>
     import SvelteSegmentedInput from 'svelte-segmented-input'
@@ -25,6 +27,26 @@ A simple component for number-only segmented input. Ideal for 2FA codes. Minifie
 `style` is an object which holds sets custom CSS properties to control the styling of the component.
 
 `on:valueEntered` is an event that fires every time a full value is entered. `event.detail.value` is the value that was entered.
+
+### 2. Vanilla JS (with module bundler)
+
+```javascript
+import SegmentedInput from 'svelte-segmented-input'
+
+const component = new SegmentedInput({
+	target: document.querySelector('#app'), // where to attach the component in the DOM
+	props: {
+		length: 6, // length of the input; can be an array to specify segments
+		value: 123, // initial value
+	},
+})
+
+// event listener. removeEvent() will remove the event listener
+const removeEvent = component.$on('valueEntered', (e) => console.log(e.detail.value))
+
+// log the current value of the component
+console.log(component.value)
+```
 
 ## STYLING:
 
