@@ -2,7 +2,7 @@
 
 A simple component for number-only segmented input. Ideal for 2FA codes. Minified and gzipped the package is ~9kb, and can be used with svelte's client-side component API in non-svelte projects.
 
-**NOTE:** Even though it's at version 1.x, expect bugs and breaking changes up until 2.0.
+**NOTE:** Deprecated
 
 ## HOW TO USE:
 
